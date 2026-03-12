@@ -11,7 +11,7 @@ from typing import Dict, Any
 from src.research.risk_profile import ReconciledRiskProfile
 from src.engine.features.feature_builder import FeatureVectorBuilder
 from src.engine.models.xgb_scorer import XGBoostScorer
-# We will import SHAP here in Step 3
+from src.engine.explainability.shap_explainer import SHAPExplainer
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +21,7 @@ class CreditScoringPipeline:
     def __init__(self):
         self.feature_builder = FeatureVectorBuilder()
         self.scorer = XGBoostScorer()
+        self.explainer = SHAPExplainer(self.scorer.model)
 
     def generate_decision(self, profile: ReconciledRiskProfile) -> Dict[str, Any]:
         """
@@ -47,8 +48,8 @@ class CreditScoringPipeline:
         elif pd_score < 0.40:
             recommendation = "MANUAL_REVIEW_REQUIRED"
 
-        # (Placeholder for Step 3: SHAP Explanations)
-        shap_explanations = {"top_positive": [], "top_negative": []}
+        # 5. SHAP Explanations
+        shap_explanations = self.explainer.explain_prediction(feature_vector)
 
         decision_package = {
             "cin": cin,
