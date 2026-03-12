@@ -14,6 +14,10 @@ from langchain_core.messages import HumanMessage, AIMessage
 from configs.settings import settings
 from src.research.tools.web_search import WebSearchTool
 from src.research.tools.fetch_page import FetchPageTool
+from src.research.tools.mca_fetcher import MCAFetcherTool
+from src.research.tools.ecourts_fetcher import ECourtsFetcherTool
+from src.research.tools.rbi_fetcher import RBIFetcherTool
+from src.research.tools.sebi_fetcher import SEBIFetcherTool
 
 logger = logging.getLogger(__name__)
 
@@ -44,10 +48,13 @@ class ResearchAgent:
             temperature=0.2
         )
         
-        # We will add more tools in Step 2 (MCA, eCourts, etc.)
         self.tools = [
             WebSearchTool(),
-            FetchPageTool()
+            FetchPageTool(),
+            MCAFetcherTool(),
+            ECourtsFetcherTool(),
+            RBIFetcherTool(),
+            SEBIFetcherTool()
         ]
         
         prompt = ChatPromptTemplate.from_messages([
