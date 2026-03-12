@@ -1,0 +1,65 @@
+# Core
+python-dotenv==1.0.0
+pydantic==2.6.4
+pydantic-settings==2.2.1
+
+# PDF / OCR
+pdfplumber==0.11.0
+PyMuPDF==1.24.0
+easyocr==1.7.1
+pytesseract==0.3.10
+opencv-python==4.9.0.80
+Pillow==10.3.0
+img2table==1.2.9
+python-magic-bin==0.4.14; sys_platform == 'win32'
+python-magic==0.4.27; sys_platform != 'win32'
+
+# LLM / RAG
+langchain==0.1.16
+langchain-openai==0.1.3
+langchain-google-genai==1.0.3
+langchain-community==0.0.34
+openai==1.23.3
+google-generativeai==0.5.2
+chromadb==0.4.24
+tiktoken==0.6.0
+
+# Web Research
+tavily-python==0.3.1
+requests==2.31.0
+beautifulsoup4==4.12.3
+playwright==1.43.0
+
+# Structured Data
+pandas==2.2.2
+openpyxl==3.1.2
+numpy==1.26.4
+
+# NLP / ML
+transformers==4.39.3
+torch==2.2.2
+scikit-learn==1.4.2
+xgboost==2.0.3
+shap==0.45.0
+networkx==3.3
+finbert-embedding==0.1.5
+
+# API / Web
+fastapi==0.110.2
+uvicorn==0.29.0
+celery==5.3.6
+redis==5.0.4
+websockets==12.0
+python-multipart==0.0.9
+
+# Document Generation
+reportlab==4.1.0
+python-docx==1.1.0
+Jinja2==3.1.3
+matplotlib==3.8.4
+
+# Testing
+pytest==8.1.1
+pytest-asyncio==0.23.6
+pytest-mock==3.14.0
+httpx==0.27.0
