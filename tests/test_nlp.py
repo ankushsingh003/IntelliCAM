@@ -10,14 +10,12 @@ from src.ingestor.nlp.postprocessor import IndianContextPostprocessor
 class TestDocumentChunker:
     
     def test_chunking_large_text(self):
-        # Create dummy text of 2000 characters
         text = "A" * 2000
         chunker = DocumentChunker(chunk_size=1500, chunk_overlap=200)
         chunks = chunker.chunk_text(text)
         
         assert len(chunks) == 2
         assert len(chunks[0]) == 1500
-        # Second chunk will be remaining 500 + 200 overlap = 700
         assert len(chunks[1]) == 700
 
     def test_chunking_empty_string(self):

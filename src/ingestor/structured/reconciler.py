@@ -20,7 +20,6 @@ class CrossSourceReconciler:
         variance = gst_revenue - bank_inward
         variance_pct = (variance / gst_revenue) * 100 if gst_revenue else 0.0
 
-        # Flag if bank inflows are > 20% lower than GST reported revenue
         is_flagged = variance_pct > 20.0
 
         return {
@@ -39,7 +38,6 @@ class CrossSourceReconciler:
         variance = abs(gst_revenue - itr_gross_income)
         variance_pct = (variance / max(gst_revenue, itr_gross_income)) * 100 if max(gst_revenue, itr_gross_income) else 0.0
         
-        # Rule of thumb: Usually closely match, >10% variance needs explanation
         is_flagged = variance_pct > 10.0
 
         return {
@@ -59,7 +57,6 @@ class CrossSourceReconciler:
         bank_in = bank_data.get("total_inward", 0.0)
         itr_gross = itr_data.get("gross_total_income", 0.0)
 
-        # Skip reconciliation if some data is missing
         if not gst_rev or not bank_in or not itr_gross:
             return {"status": "incomplete_data"}
 

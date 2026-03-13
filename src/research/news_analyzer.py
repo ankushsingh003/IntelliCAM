@@ -12,7 +12,6 @@ class NewsAnalyzer:
     """Analyzes financial news sentiment."""
 
     def __init__(self):
-        # In a real environment, we would load ProsusAI/finbert here via transformers pipeline
         logger.info("Initializing FinBERT News Analyzer (Mock Mode)")
 
     def analyze_headlines(self, headlines: List[str]) -> Dict[str, Any]:
@@ -28,7 +27,6 @@ class NewsAnalyzer:
         
         for h in headlines:
             h_lower = h.lower()
-            # Simple rule-based mock for demonstration
             if "fraud" in h_lower or "default" in h_lower or "plunge" in h_lower or "investigation" in h_lower:
                 score_sum -= 0.8
                 negative_count += 1

@@ -24,7 +24,6 @@ class IndianContextPostprocessor:
             
         value_str = value_str.lower().replace(",", "").strip()
         
-        # Find numeric part
         num_match = re.search(r"[\d\.]+", value_str)
         if not num_match:
             return 0.0
@@ -44,17 +43,13 @@ class IndianContextPostprocessor:
         normalized = {}
         for key, value in payload.items():
             if isinstance(value, str) and ("crs" in key_name_lower or "lakhs" in key_name_lower):
-                # Specifically targets keys hinting at currency
                normalized[key] = value # Usually handled automatically by schema, kept flat for this version
                pass
                
-            # Just simple pass through for now, as GPT usually formats it right if asked in prompt
-            # But here is where we would enforce data types.
             normalized[key] = value
             
         return normalized
 
-    # Helper variable for above method due to scope gap
     @staticmethod
     def _is_currency_key(key: str) -> bool:
         k = key.lower()

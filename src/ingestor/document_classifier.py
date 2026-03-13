@@ -129,7 +129,6 @@ class DocumentClassifier:
                 requires_manual_review=True,
             )
 
-        # Truncate to ~500 words
         words = text_sample.split()
         truncated = " ".join(words[:500])
 

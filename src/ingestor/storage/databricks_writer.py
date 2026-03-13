@@ -30,14 +30,11 @@ class DatabricksWriter:
         file_path = self.output_dir / f"profile_{cin}.json"
         
         try:
-            # For the local hackathon env, we save as JSON
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(profile.model_dump_json(indent=2))
             
             logger.info(f"Successfully wrote risk profile for {cin} to {file_path}")
             
-            # Here we would use databricks-sql-connector to UPSERT into Delta tables:
-            # e.g., "MERGE INTO credit_lake.financials target USING new_data source ..."
             if self.host:
                 logger.debug(f"Mock sync to Databricks {self.host} completed.")
                 

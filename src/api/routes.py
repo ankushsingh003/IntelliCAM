@@ -25,7 +25,6 @@ class AppraisalResponse(BaseModel):
     message: str
     report_id: str
 
-# Instantiate pipelines once
 ingestor = DataIngestorPipeline()
 researcher = ResearchPipeline()
 reporter = ReportBuilder()
@@ -35,16 +34,13 @@ def run_full_pipeline(payload: AppraisalRequest):
     try:
         logger.info(f"--- STARTED FULL APPRAISAL PIPELINE FOR {payload.cin} ---")
         
-        # Phase 1
         ingestor_profile = ingestor.process_directory(payload.cin, payload.documents_folder_path)
         
-        # Phase 2
         reconciled_profile = researcher.execute(
             ingestor_profile, 
             primary_insights={"raw_notes": payload.credit_officer_notes} if payload.credit_officer_notes else {}
         )
         
-        # Phase 3
         final_report = reporter.generate_report(reconciled_profile)
         
         logger.info(f"--- FINISHED FINAL REPORT: RECOMMENDATION = {final_report.engine_recommendation} ---")
@@ -61,8 +57,6 @@ async def trigger_appraisal(payload: AppraisalRequest, background_tasks: Backgro
     """
     logger.info(f"Received appraisal request for CIN: {payload.cin}")
     
-    # In a real system, we'd return a Job ID and they'd poll or we'd emit Webhooks.
-    # We will trigger background execution here.
     background_tasks.add_task(run_full_pipeline, payload)
     
     return AppraisalResponse(

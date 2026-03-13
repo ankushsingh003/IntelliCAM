@@ -52,21 +52,17 @@ class DataIngestorPipeline:
 
         logger.info(f"Starting Data Ingestion Pipeline for CIN: {customer_cin}")
         
-        # Accumulators
         gst_data = {}
         bank_data = {}
         itr_data = {}
         
-        # 1. Process files
         for file_path in target_dir.iterdir():
             if file_path.is_file() and not file_path.name.startswith("."):
                 self._process_single_file(file_path, customer_cin, gst_data, bank_data, itr_data)
 
-        # 2. Reconcile Structured Data
         reconciliation = CrossSourceReconciler.generate_consolidated_report(gst_data, bank_data, itr_data)
         logger.info(f"Reconciliation Status: {reconciliation.get('status')}")
 
-        # 3. Assemble Initial Profile
         profile = UnifiedRiskProfile(
             identity=CompanyIdentitySchema(company_name="Pending Profile", cin=customer_cin),
             financials=[],
@@ -75,11 +71,9 @@ class DataIngestorPipeline:
             data_completeness_score=0.0
         )
         
-        # 4. Score Quality
         score = self.scorer.calculate_completeness(profile)
         profile.data_completeness_score = score
         
-        # 5. Write to Lake
         self.writer.write_profile(profile)
         
         return profile
@@ -88,7 +82,6 @@ class DataIngestorPipeline:
         """Routes and executes logic for a single document."""
         logger.info(f"Processing file: {file_path.name}")
         
-        # 1. Detect & Extract
         file_info = detect_file_type(file_path)
         
         if file_info.is_pdf:
@@ -98,28 +91,22 @@ class DataIngestorPipeline:
             logger.warning(f"Skipping non-PDF file currently: {file_path.name}")
             return
 
-        # 2. Classify
         classification = self.classifier.classify_from_file_text(full_text)
         
-        # 3. Route
         decision = self.router.route(file_info, classification)
         
-        # 4. Embed to Vector Store (for all unstructured access later)
         chunks = self.chunker.chunk_text(full_text)
         if chunks:
             self.embedder.embed_and_store(chunks, {"cin": cin, "file_name": file_path.name, "doc_type": classification.document_type.value})
 
-        # 5. Execute Structured Pipeline based on route
         if decision.route == PipelineRoute.GST_PROCESSOR:
             parsed = GSTParser.parse_gstr3b(doc_data)
             gst_data.update(parsed)
             
         elif decision.route == PipelineRoute.BANK_PROCESSOR:
-            # Mock bank table processing for the flow
             parsed = BankStatementParser.analyze_cash_flow(BankStatementParser.parse_statement([]))
             bank_data.update(parsed)
             
         else:
-            # ReAct agent or NLP extractor will pick this up in Phase 2/3
             logger.debug(f"{file_path.name} routed to Unstructured pool.")
 

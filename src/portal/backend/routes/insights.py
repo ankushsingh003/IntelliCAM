@@ -36,11 +36,8 @@ async def submit_insight(payload: InsightSubmission):
         raise HTTPException(status_code=400, detail="Field notes cannot be empty.")
         
     try:
-        # Interpret the notes
         structured_data = interpreter.interpret_notes(payload.raw_field_notes)
         
-        # In a full flow, you would now merge `structured_data` into the 
-        # `UnifiedRiskProfile` in Databricks/Storage.
         logger.info("Successfully interpreted field notes.")
         
         return ParsedInsightResponse(

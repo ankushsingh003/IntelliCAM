@@ -95,7 +95,6 @@ class ResearchAgent:
             "chat_history": self.chat_history
         })
         
-        # Save to memory context for follow-ups
         self.chat_history.extend([
             HumanMessage(content=query),
             AIMessage(content=response["output"])

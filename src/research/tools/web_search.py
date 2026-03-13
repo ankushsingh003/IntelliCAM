@@ -45,7 +45,6 @@ class WebSearchTool(BaseTool):
             response.raise_for_status()
             data = response.json()
             
-            # Extract combined answer and result snippets
             answer = data.get("answer", "")
             results = "\n".join([f"- {r['title']}: {r['content'][:200]} ({r['url']})" for r in data.get("results", [])])
             

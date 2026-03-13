@@ -22,14 +22,12 @@ def train_dummy_model():
     np.random.seed(42)
     n_samples = 5000
     
-    # Generate 5Cs scores (0-100)
     character = np.random.normal(60, 20, n_samples).clip(0, 100)
     capacity = np.random.normal(60, 20, n_samples).clip(0, 100)
     capital = np.random.normal(55, 25, n_samples).clip(0, 100)
     collateral = np.random.normal(70, 15, n_samples).clip(0, 100)
     conditions = np.random.normal(50, 20, n_samples).clip(0, 100)
     
-    # Generate specific flags
     bounce_count = np.random.poisson(1, n_samples)
     shell_flag = np.random.binomial(1, 0.05, n_samples)
     auto_reject = np.random.binomial(1, 0.02, n_samples)
@@ -45,15 +43,12 @@ def train_dummy_model():
         "is_auto_reject": auto_reject
     })
     
-    # Generate Target: Probability of Default (PD)
-    # Higher scores = Lower PD
     base_pd = 1.0 - ((character + capacity + capital + collateral + conditions) / 500.0)
     base_pd += (bounce_count * 0.05)
     base_pd += (shell_flag * 0.3)
     base_pd = np.where(auto_reject == 1, 0.99, base_pd)
     base_pd = base_pd.clip(0.01, 0.99)
     
-    # Convert PD to a binary default outcome for standard binary logistic regression
     y = np.random.binomial(1, base_pd)
     
     X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)

@@ -15,7 +15,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Attempt to import python-magic (libmagic backed)
 try:
     import magic  # python-magic or python-magic-bin
     _MAGIC_AVAILABLE = True
@@ -89,7 +88,6 @@ def detect_file_type(file_path: str | Path) -> FileTypeResult:
 
     extension = path.suffix.lower()
 
-    # 1. Try python-magic for true MIME detection
     if _MAGIC_AVAILABLE:
         try:
             mime_type: str = magic.from_file(str(path), mime=True)

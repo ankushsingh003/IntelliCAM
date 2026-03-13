@@ -34,7 +34,6 @@ class CapitalEngineer:
         elif d_e_ratio > 4.0:
             score -= 40 # Overleveraged
             
-        # Size factor
         if equity > 50.0:
             score += 10
             

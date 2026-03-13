@@ -22,8 +22,6 @@ class MCAFetcherTool(BaseTool):
     def _run(self, cin: str) -> str:
         logger.info(f"Fetching MCA data for CIN: {cin}")
         
-        # In a real hackathon submission, this would call an API like Razorpay MCA or setu.co
-        # We are mocking the response based on typical MCA master data
         if len(cin) < 20:
             return "Error: Invalid CIN format. Ensure it is a 21-character string."
             

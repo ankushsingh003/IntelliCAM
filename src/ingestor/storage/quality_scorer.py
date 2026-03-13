@@ -20,13 +20,11 @@ class DataQualityScorer:
         total_points = 100
         deductions = 0
         
-        # Identity checks
         if not profile.identity.pan:
             deductions += 15
         if not profile.identity.cin and not profile.identity.gstin:
             deductions += 15
             
-        # Financial checks
         if not profile.financials:
             deductions += 30  # Critical gap
         else:
@@ -36,7 +34,6 @@ class DataQualityScorer:
             if latest_fin.net_worth_crs == 0:
                 deductions += 10
                 
-        # Bank flow checks
         if not profile.bank_flows:
             deductions += 20
             

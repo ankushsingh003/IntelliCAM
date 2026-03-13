@@ -35,18 +35,15 @@ class FetchPageTool(BaseTool):
             
             soup = BeautifulSoup(response.text, "html.parser")
             
-            # Remove scripts, styles
             for script in soup(["script", "style", "nav", "footer", "header"]):
                 script.extract()
                 
             text = soup.get_text(separator="\n")
             
-            # Condense whitespace
             lines = (line.strip() for line in text.splitlines())
             chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
             text = "\n".join(chunk for chunk in chunks if chunk)
             
-            # Truncate to avoid exploding the context window (approx 4000 words limit here)
             words = text.split()
             if len(words) > 4000:
                 text = " ".join(words[:4000]) + "\n\n...[Content Truncated]..."

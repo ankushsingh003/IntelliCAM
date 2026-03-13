@@ -30,16 +30,12 @@ class CreditScoringPipeline:
         cin = profile.cin
         logger.info(f"Starting Phase 3 Engine Pipeline for: {cin}")
 
-        # 1. Build Feature Vector
         feature_vector = self.feature_builder.build_vector(profile)
 
-        # 2. XGBoost Inference (Probability of Default)
         pd_score = self.scorer.predict_pd(feature_vector)
         
-        # 3. Credit Rating Tier
         rating = self.scorer.get_credit_rating(pd_score)
 
-        # 4. Engine Recommendation logic
         recommendation = "REJECT"
         if profile.is_auto_reject:
             recommendation = "AUTO_REJECT"
@@ -48,7 +44,6 @@ class CreditScoringPipeline:
         elif pd_score < 0.40:
             recommendation = "MANUAL_REVIEW_REQUIRED"
 
-        # 5. SHAP Explanations
         shap_explanations = self.explainer.explain_prediction(feature_vector)
 
         decision_package = {

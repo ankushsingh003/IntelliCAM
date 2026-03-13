@@ -53,7 +53,6 @@ class FieldNoteInterpreter:
             return data
         except Exception as e:
             logger.error(f"LLM Interpretation failed: {e}")
-            # Fallback
             return {
                 "management_quality": "Average",
                 "factory_utilization_pct": 0.0,

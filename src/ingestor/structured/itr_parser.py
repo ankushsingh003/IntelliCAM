@@ -19,7 +19,6 @@ class ITRParser:
         """
         logger.info("Extracting ITR metrics...")
         
-        # In reality, regex or prompt-based extraction is used here
         return {
             "assessment_year": "2023-24",
             "gross_total_income": 25000000.0,

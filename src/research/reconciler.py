@@ -20,7 +20,6 @@ class ResearchReconciler:
         
         flags = []
         
-        # 1. Management Quality Mismatch
         primary_quality = research_data.get("primary_insights", {}).get("management_quality", "Average")
         if primary_quality == "Poor":
             flags.append({
@@ -28,7 +27,6 @@ class ResearchReconciler:
                 "reason": "Credit Officer reported POOR management quality on-site."
             })
             
-        # 2. Revenue vs Sentiment Mismatch
         financials = ingestor_profile.get("financials", [])
         if financials:
             latest = financials[-1]
@@ -41,7 +39,6 @@ class ResearchReconciler:
                     "reason": f"High reported revenue ({rev} Cr) contrasts with Negative media sentiment."
                 })
                 
-        # 3. Regulatory / Legal Checks
         legal = research_data.get("regulatory_status", {})
         if legal.get("has_active_sebi_bans") or legal.get("nclt_petitions_found"):
             flags.append({

@@ -33,11 +33,9 @@ class FeatureVectorBuilder:
         vector.update(CollateralEngineer.extract_features(profile))
         vector.update(ConditionsEngineer.extract_features(profile))
         
-        # Meta features
         vector["data_completeness_penalty"] = 100.0 - profile.internal_data.data_completeness_score
         vector["total_reconciliation_flags"] = float(len(profile.reconciliation_flags))
         
-        # Auto-reject boolean (XGBoost can treat as a 1/0 heavy weight feature)
         vector["is_auto_reject"] = 1.0 if profile.is_auto_reject else 0.0
 
         return vector

@@ -15,9 +15,6 @@ from src.ingestor.file_type_detector import FileTypeResult
 from src.ingestor.router import DocumentRouter, PipelineRoute, RoutingDecision
 
 
-# ────────────────────────────────────────────────────────────────────────────
-# DocumentClassifier Tests
-# ────────────────────────────────────────────────────────────────────────────
 
 class TestDocumentClassifier:
 
@@ -75,9 +72,6 @@ class TestDocumentClassifier:
         assert result2.is_legal is False
 
 
-# ────────────────────────────────────────────────────────────────────────────
-# DocumentRouter Tests
-# ────────────────────────────────────────────────────────────────────────────
 
 class TestDocumentRouter:
 

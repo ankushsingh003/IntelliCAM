@@ -18,7 +18,6 @@ class SHAPExplainer:
     def __init__(self, booster: xgb.Booster):
         self.booster = booster
         if self.booster:
-            # TreeExplainer is fast for XGBoost
             self.explainer = shap.TreeExplainer(self.booster)
         else:
             self.explainer = None
@@ -34,10 +33,8 @@ class SHAPExplainer:
 
         df = pd.DataFrame([feature_vector])
         
-        # Calculate SHAP values
         shap_values = self.explainer.shap_values(df)
         
-        # In binary classification with TreeExplainer, it usually returns a single matrix for the log-odds of the positive class
         instance_shap = shap_values[0]
         
         features = list(feature_vector.keys())
@@ -50,9 +47,6 @@ class SHAPExplainer:
                 "shap_value": float(instance_shap[i])
             })
             
-        # Sort by impact
-        # Positive SHAP means it PUSHED the Probability of Default UP (Bad)
-        # Negative SHAP means it PUSHED the Probability of Default DOWN (Good)
         
         contributions.sort(key=lambda x: x["shap_value"], reverse=True)
         

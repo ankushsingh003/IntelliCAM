@@ -40,27 +40,21 @@ class PDFExtractor:
         full_text_blocks = []
         page_details = []
         
-        # 1. Process Each Page (Digital Text + OCR Fallback)
         for page_num in range(len(doc)):
             page = doc.load_page(page_num)
             
-            # Try native text extraction first
             text = page.get_text("text").strip()
             source = "digital"
             confidence = 1.0
             
-            # If native text is too short, assume it's a scanned image
             if len(text) < 50:
                 logger.debug(f"Page {page_num+1} seems scanned. Running OCR...")
                 
-                # Render page to image bytes
                 pix = page.get_pixmap(dpi=300)
                 img_bytes = pix.tobytes("png")
                 
-                # Preprocess
                 cv_img = ImagePreprocessor.preprocess_for_ocr(img_bytes)
                 
-                # Ensemble OCR
                 text, confidence, source = self.ensemble.extract_best(cv_img)
             
             if text:
@@ -74,10 +68,8 @@ class PDFExtractor:
 
         doc.close()
 
-        # 2. Extract Tables
         tables = TableExtractor.extract_tables_from_pdf(file_path)
 
-        # 3. Assemble Output
         final_text = "\n\n--- PAGE BREAK ---\n\n".join(full_text_blocks)
         
         return {

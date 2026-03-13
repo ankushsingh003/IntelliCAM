@@ -32,7 +32,6 @@ class RAGExtractor:
         """
         Runs RAG to fetch context and extract structured JSON using the given prompt.
         """
-        # Retrieve context from ChromaDB
         filter_dict = {"file_name": file_name} if file_name else None
         
         docs = self.embedder.similarity_search(query=query, top_k=4, filter_dict=filter_dict)
@@ -42,13 +41,11 @@ class RAGExtractor:
 
         context = "\n\n".join([doc.page_content for doc in docs])
         
-        # Format the prompt
         prompt_template = PromptTemplate.from_template(prompt_template_str)
         formatted_prompt = prompt_template.format(context=context)
 
         logger.info(f"Invoking LLM for RAG extraction (context size: {len(context)} chars).")
         
-        # Invoke LLM
         try:
             response = self.llm.invoke(formatted_prompt)
             return json.loads(response.content)

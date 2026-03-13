@@ -27,14 +27,11 @@ class TesseractExtractor:
         Extracts text and computes average confidence using image_to_data.
         """
         try:
-            # Get full text
             text = pytesseract.image_to_string(image, lang=lang)
             
-            # Get data for confidence calculation
             data = pytesseract.image_to_data(image, lang=lang, output_type=pytesseract.Output.DICT)
             df = pd.DataFrame(data)
             
-            # Filter out empty text blocks usually scored as -1 or 0 irregularly
             valid_conf = df[df['conf'] > 0]
             avg_confidence = valid_conf['conf'].mean() / 100.0 if not valid_conf.empty else 0.0
             

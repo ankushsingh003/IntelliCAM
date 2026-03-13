@@ -23,7 +23,6 @@ class TestOCREnsemble:
     @patch("src.ingestor.ocr.easyocr_extractor.EasyOCRExtractor.extract_text")
     @patch("src.ingestor.ocr.tesseract_extractor.TesseractExtractor.extract_text")
     def test_ensemble_chooses_higher_confidence(self, mock_tess, mock_easy):
-        # EasyOCR has higher confidence
         mock_easy.return_value = ("Easy Text", 0.95)
         mock_tess.return_value = ("Tess Text", 0.80)
 
@@ -31,7 +30,6 @@ class TestOCREnsemble:
              patch("src.ingestor.ocr.tesseract_extractor.TesseractExtractor.__init__", return_value=None):
             
             ensemble = OCREnsemble()
-            # Manually set mocked instances
             ensemble.easyocr = MagicMock()
             ensemble.easyocr.extract_text = mock_easy
             ensemble.tesseract = MagicMock()
@@ -47,7 +45,6 @@ class TestOCREnsemble:
     @patch("src.ingestor.ocr.easyocr_extractor.EasyOCRExtractor.extract_text")
     @patch("src.ingestor.ocr.tesseract_extractor.TesseractExtractor.extract_text")
     def test_ensemble_chooses_tesseract(self, mock_tess, mock_easy):
-        # Tesseract has higher confidence
         mock_easy.return_value = ("Easy Text", 0.60)
         mock_tess.return_value = ("Tess Text", 0.88)
 

@@ -16,8 +16,6 @@ class CollateralEngineer:
         
         score = 60.0
         
-        # In a real app, we parse exact assets from MCA Charge Register
-        # Here we mock a generic calculation: how much net worth is unencumbered?
         
         financials = profile.internal_data.financials
         if not financials:
@@ -25,7 +23,6 @@ class CollateralEngineer:
              
         latest = financials[-1]
         
-        # Assume existing debt is fully backed by collateral
         unencumbered_assets = latest.net_worth_crs * 1.5 - latest.total_debt_crs
         unencumbered_ratio = unencumbered_assets / latest.net_worth_crs if latest.net_worth_crs else 0.0
         

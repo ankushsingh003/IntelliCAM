@@ -16,21 +16,18 @@ class ConditionsEngineer:
         
         score = 50.0  # Base neutral
         
-        # Sector Outlook
         outlook = profile.external_osint.industry_outlook.lower()
         if "positive" in outlook:
             score += 20
         elif "negative" in outlook:
             score -= 20
             
-        # Primary OSINT - Management Quality from portal
         mgmt_quality = profile.primary_insights.get("management_quality", "Average")
         if mgmt_quality == "Good":
             score += 20
         elif mgmt_quality == "Poor":
             score -= 30
             
-        # Field note: factory utilized
         utilization = profile.primary_insights.get("factory_utilization_pct", 70.0)
         if utilization < 40.0:
              score -= 20

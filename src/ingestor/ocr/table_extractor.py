@@ -25,7 +25,6 @@ class TableExtractor:
                     extracted_tables = page.extract_tables()
                     for table in extracted_tables:
                         if table:
-                            # Clean up None values
                             cleaned_table = [
                                 [cell if cell is not None else "" for cell in row]
                                 for row in table

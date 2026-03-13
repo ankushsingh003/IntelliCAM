@@ -19,20 +19,15 @@ class ImagePreprocessor:
         """
         Main pipeline: Takes raw image bytes, returns preprocessed OpenCV image.
         """
-        # Decode image
         nparr = np.frombuffer(image_bytes, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if img is None:
             raise ValueError("Failed to decode image bytes")
 
-        # 1. Grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        # 2. Deskew
         gray = ImagePreprocessor.deskew(gray)
 
-        # 3. Adaptive Thresholding (Binarization)
-        # Using adaptive thresholding usually works best for document text
         thresh = cv2.adaptiveThreshold(
             gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2
         )
@@ -52,7 +47,6 @@ class ImagePreprocessor:
         else:
             angle = -angle
 
-        # If angle is very small, ignore it
         if abs(angle) < 0.5:
             return image
 

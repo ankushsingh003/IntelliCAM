@@ -23,8 +23,6 @@ class CapacityEngineer:
             
         latest = financials[-1]
         
-        # Synthesize DSCR (Debt Service Coverage Ratio)
-        # Mock formula: EBITDA / (Total Debt * 0.15 assumed interest/principal rate)
         estimated_debt_service = latest.total_debt_crs * 0.15
         dscr = latest.ebitda_crs / estimated_debt_service if estimated_debt_service > 0 else 3.0
         
@@ -35,12 +33,10 @@ class CapacityEngineer:
         else:
             score -= 30  # Danger! Cannot service existing debt
             
-        # EBITDA Margin
         ebitda_margin = (latest.ebitda_crs / latest.revenue_crs * 100) if latest.revenue_crs else 0.0
         if ebitda_margin > 15.0:
             score += 20
             
-        # Any GST vs Bank mismatch drops capacity trust
         revenue_mismatch = any(f.reason for f in profile.reconciliation_flags if "revenue" in f.reason.lower())
         if revenue_mismatch:
             score -= 25

@@ -31,8 +31,6 @@ class OCREnsemble:
         
         logger.debug(f"EasyOCR conf: {easy_conf:.2f}, Tesseract conf: {tess_conf:.2f}")
 
-        # Basic ensemble logic: Pick the one with the higher confidence.
-        # Can be enhanced with layout analysis or voting per block.
         if easy_conf >= tess_conf:
             return easy_text, easy_conf, "EasyOCR"
         else:

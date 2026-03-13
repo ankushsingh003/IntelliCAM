@@ -44,9 +44,7 @@ class XGBoostScorer:
             logger.info("Hard auto-reject triggered before ML inference.")
             return 0.99  # 99% PD
 
-        # If we have a real model loaded
         if self.model:
-            # XGBoost expects a DMatrix or DataFrame
             df = pd.DataFrame([feature_vector])
             dmatrix = xgb.DMatrix(df)
             pd_pred = self.model.predict(dmatrix)[0]
@@ -54,8 +52,6 @@ class XGBoostScorer:
             return float(pd_pred)
             
         else:
-            # --- MOCK HEURISTIC SCORER (Hackathon Fallback) ---
-            # Average the Five Cs (remember higher score = better capacity, so we invert for PD)
             avg_c_score = (
                 feature_vector.get("character_score", 50) +
                 feature_vector.get("capacity_score", 50) +
@@ -64,10 +60,8 @@ class XGBoostScorer:
                 feature_vector.get("conditions_score", 50)
             ) / 5.0
             
-            # Convert 0-100 "health" score to 0-1 "PD" score
             pd_pred = 1.0 - (avg_c_score / 100.0)
             
-            # Apply severe penalties
             if feature_vector.get("bounce_count", 0) > 2:
                 pd_pred += 0.2
             if feature_vector.get("shell_risk_flag", 0) == 1.0:

@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 class SectorProfiler:
     """Provides risk and benchmarking context for specific sectors."""
 
-    # Mock database of sector metrics for the hackathon
     _SECTOR_DB = {
         "textiles": {
             "outlook": "Negative",

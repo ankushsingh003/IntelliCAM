@@ -8,8 +8,6 @@ import logging
 import base64
 import io
 
-# Optional depending on env:
-# import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
@@ -23,5 +21,4 @@ class ChartGenerator:
         In a real app, uses shap.waterfall_plot and plt.savefig(bytes_io).
         """
         logger.info("Generating dummy SHAP waterfall chart base64 payload...")
-        # Since we are not saving real matplotlib charts in this mock, return empty.
         return "base64_img_payload_here"

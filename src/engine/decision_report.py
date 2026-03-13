@@ -30,23 +30,18 @@ class CreditDecisionReport(BaseModel):
     company_name: str
     cin: str
     
-    # ML Outputs
     probability_of_default: float
     credit_rating_tier: str
     engine_recommendation: str  # APPROVE, REJECT, MANUAL_REVIEW_REQUIRED
     
-    # 5 Cs Summarized
     five_cs_summary: FeatureDump
     
-    # Explainability
     ai_credit_narrative: str
     top_risk_drivers: List[Dict[str, Any]]
     top_mitigants: List[Dict[str, Any]]
     
-    # Validation & Alerts
     critical_reconciliation_flags: List[Dict[str, str]]
     
-    # Chart
     shap_waterfall_base64: str
 
 class ReportBuilder:
@@ -60,16 +55,12 @@ class ReportBuilder:
         """Executes the pipeline and formats the final output."""
         logger.info(f"Generating Final Credit Decision Report for {profile.cin}")
         
-        # 1. Run inference
         decision_pkg = self.pipeline.generate_decision(profile)
         
-        # 2. Generate NL Narrative
         narrative = self.narrative_gen.generate_narrative(decision_pkg)
         
-        # 3. Get charts
         chart_b64 = ChartGenerator.generate_dummy_waterfall()
         
-        # 4. Extract specific parts
         feats = decision_pkg["feature_vector"]
         shap_ex = decision_pkg.get("shap_explanations", {})
         
@@ -79,7 +70,6 @@ class ReportBuilder:
             if f.severity in ["CRITICAL", "HIGH"]
         ]
         
-        # 5. Build Pydantic Response
         report = CreditDecisionReport(
             report_id=f"CR_{profile.cin}_{int(datetime.now().timestamp())}",
             generation_timestamp=datetime.utcnow().isoformat() + "Z",

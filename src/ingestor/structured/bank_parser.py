@@ -18,8 +18,6 @@ class BankStatementParser:
         Converts extracted tables into a standardized transaction DataFrame.
         """
         logger.info("Parsing bank statement tables into DataFrame...")
-        # Mocking the conversion for the hackathon template
-        # Need to handle standard HDFC/ICICI/SBI columns: Date, Narration, Chq/Ref, Value Dt, Withdrawal, Deposit, Balance
         data = [
             {"date": "2024-01-01", "narration": "NEFT-ABC CORP", "withdrawal": 0, "deposit": 500000, "balance": 1500000},
             {"date": "2024-01-02", "narration": "RTGS-XYZ LTD", "withdrawal": 450000, "deposit": 0, "balance": 1050000},
@@ -50,12 +48,10 @@ class BankStatementParser:
         Detects if funds are coming in and immediately going out to related parties.
         (Simplified proxy logic for hackathon)
         """
-        # A simple heuristic: High volume of same-day large transactions
         try:
             df['date'] = pd.to_datetime(df['date'])
             daily_aggregates = df.groupby('date').agg({'deposit': 'sum', 'withdrawal': 'sum'})
             
-            # If daily withdrawal is > 95% of daily deposit repeatedly on large amounts
             circular_days = daily_aggregates[
                 (daily_aggregates['deposit'] > 1000000) & 
                 (daily_aggregates['withdrawal'] >= daily_aggregates['deposit'] * 0.95)

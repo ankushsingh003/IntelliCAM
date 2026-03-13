@@ -73,7 +73,6 @@ class DocumentRouter:
         Returns:
             RoutingDecision describing where to send the document.
         """
-        # Manual review for unknown file categories
         if file_result.file_category == "unknown":
             return RoutingDecision(
                 route=PipelineRoute.MANUAL_REVIEW,
@@ -84,7 +83,6 @@ class DocumentRouter:
                 priority=2,
             )
 
-        # Manual review for low-confidence classifications
         if classification.requires_manual_review:
             return RoutingDecision(
                 route=PipelineRoute.MANUAL_REVIEW,

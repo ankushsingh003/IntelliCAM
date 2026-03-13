@@ -42,7 +42,6 @@ class NarrativeGenerator:
         """Calls the LLM to generate the final human explanation."""
         logger.info(f"Generating human narrative for {decision_package['company_name']}")
         
-        # Format drivers
         shap_exps = decision_package.get("shap_explanations", {})
         
         rd_str = "\n".join([f"- {d['feature']} (value: {d['value']:.2f})" for d in shap_exps.get("top_risk_drivers", [])])

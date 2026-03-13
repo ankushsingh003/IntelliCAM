@@ -22,7 +22,6 @@ class ECourtsFetcherTool(BaseTool):
     def _run(self, company_name: str) -> str:
         logger.info(f"Searching e-Courts for: {company_name}")
         
-        # Mocking the response. A real integration might use a legal API provider.
         if "fraud" in company_name.lower() or "default" in company_name.lower():
              return f"ALERT: Found 3 active cases in NCLT Mumbai against {company_name} under IBC Section 7 for loan default."
              
