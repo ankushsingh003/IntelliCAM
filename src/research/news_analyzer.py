@@ -22,14 +22,14 @@ class NewsAnalyzer:
         if not headlines:
             return {"composite_score": 0.0, "label": "Neutral", "risk_flag": False}
             
-        score_sum = 0.0
-        negative_count = 0
+        score_sum: float = 0.0
+        negative_count: int = 0
         
         for h in headlines:
             h_lower = h.lower()
             if "fraud" in h_lower or "default" in h_lower or "plunge" in h_lower or "investigation" in h_lower:
                 score_sum -= 0.8
-                negative_count += 1
+                negative_count = negative_count + 1 
             elif "profit" in h_lower or "growth" in h_lower or "surge" in h_lower or "award" in h_lower:
                 score_sum += 0.6
             else:
